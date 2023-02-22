@@ -133,7 +133,7 @@ class App(ctk.CTk):
         self.fileEntry.insert(ctk.END, tf)
         
 
-        if mode == "Microphone":
+        if self.mode == "Microphone":
             pass # Function name
         else:
             self.img_speech(list(tf))
