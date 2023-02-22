@@ -193,7 +193,7 @@ class App(ctk.CTk):
 
             self.textLabel.configure(text=self.label)
         
-    def mp_to_text(slef, ##file path)
+    # def mp_to_text(slef, ##file path)
 
     def speect_text_image(self, sentence):      
 
