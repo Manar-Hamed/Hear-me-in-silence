@@ -67,9 +67,12 @@ class App(ctk.CTk):
 
         # Browse Button
         self.browseButton = ctk.CTkButton(self.rframe, text="Browse", command=self.browse)
+        self.browseButton.grid(row=1, column=2, padx=(20, 20), pady=(20, 20))
+        
 
         # File Path Entry
         self.fileEntry = ctk.CTkEntry(self.rframe, placeholder_text="File Path")
+        self.fileEntry.grid(row=1, column=0, columnspan=2, padx=(20, 20), pady=(20, 20), sticky="nsew")
 
         # Text Label
         self.textLabel = ctk.CTkLabel(master=self.rframe, text="Click on the Mic Button and Speak", font=ctk.CTkFont(size=18, weight="bold"), anchor="e")
@@ -98,14 +101,17 @@ class App(ctk.CTk):
     imgdir = 'data\ArASL_Database_54K_Final\ArASL_Database_54K_Final'
     special_characters = ['@', '!', '؟', '$', '%', '^', '*', '-', '_']
     ArSL = []
+    mode = ""
 
     # Commands Section
     def inputType(self, input_mode: str):
+
+        mode = input_mode
     
         if input_mode == "Microphone":
             self.camButton.grid_forget()
-            self.browseButton.grid_forget()
-            self.fileEntry.grid_forget()
+            # self.browseButton.grid_forget()
+            # self.fileEntry.grid_forget()
             self.playButton.grid_forget()
             self.textLabel.configure(text="Click on the Mic Button and Speak")
             self.inframe.grid(row=1, column=0, rowspan=3, columnspan=4, sticky="nsew")
@@ -115,8 +121,7 @@ class App(ctk.CTk):
             self.textLabel.configure(text="")
             self.inframe.grid_forget()
             self.camButton.grid(row=0, column=0, padx=(20, 20), pady=(20, 20))
-            self.browseButton.grid(row=1, column=2, padx=(20, 20), pady=(20, 20))
-            self.fileEntry.grid(row=1, column=0, columnspan=2, padx=(20, 20), pady=(20, 20), sticky="nsew")
+           
 
 
     def browse(self):  # Open Image Files
@@ -126,8 +131,12 @@ class App(ctk.CTk):
             filetypes=(("All Files", "*.*"), ("Images", "*.png *.jpg *.jpeg *.PNG *.JPG *.JPEG", ))
             )
         self.fileEntry.insert(ctk.END, tf)
-        # read_file(tf)
-        self.img_speech(list(tf))
+        
+
+        if mode == "Microphone":
+            pass # Function name
+        else:
+            self.img_speech(list(tf))
     
     imgs = []
 
