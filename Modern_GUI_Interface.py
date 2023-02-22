@@ -12,6 +12,8 @@ import random
 import pygame
 import cv2
 import os
+from pydub import AudioSegment
+
 
 
 ctk.set_appearance_mode("System")
@@ -101,22 +103,23 @@ class App(ctk.CTk):
     imgdir = 'data\ArASL_Database_54K_Final\ArASL_Database_54K_Final'
     special_characters = ['@', '!', '؟', '$', '%', '^', '*', '-', '_']
     ArSL = []
-    mode = ""
+    mode = "Microphone"
 
     # Commands Section
     def inputType(self, input_mode: str):
 
-        mode = input_mode
+        self.mode = input_mode
     
         if input_mode == "Microphone":
             self.camButton.grid_forget()
             # self.browseButton.grid_forget()
-            # self.fileEntry.grid_forget()
+            self.fileEntry.delete(0, ctk.END)
             self.playButton.grid_forget()
             self.textLabel.configure(text="Click on the Mic Button and Speak")
             self.inframe.grid(row=2, column=0, rowspan=3, columnspan=4, sticky="nsew")
             self.micButton.grid(row=0, column=0, padx=(20, 20), pady=(20, 20))
         else:
+            self.fileEntry.delete(0, ctk.END)
             self.micButton.grid_forget()
             self.textLabel.configure(text="")
             self.inframe.grid_forget()
@@ -134,7 +137,7 @@ class App(ctk.CTk):
         
 
         if self.mode == "Microphone":
-            pass # Function name
+            self.mp3_text(list(tf))
         else:
             self.img_speech(list(tf))
     
@@ -193,7 +196,18 @@ class App(ctk.CTk):
 
             self.textLabel.configure(text=self.label)
         
-    # def mp_to_text(slef, ##file path)
+    def mp3_text(self, file_audio):
+        file_audio = sr.AudioFile(file_audio[0])
+
+        # use the audio file as the audio source                                        
+        r = sr.Recognizer()
+        with file_audio as source:
+            audio_text = r.record(source)
+
+        # print(type(audio_text))
+        text = r.recognize_google(audio_text, language='ar-EG')
+        self.speect_text_image(text)
+
 
     def speect_text_image(self, sentence):      
 
