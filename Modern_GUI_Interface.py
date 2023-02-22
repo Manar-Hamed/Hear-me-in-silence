@@ -80,15 +80,15 @@ class App(ctk.CTk):
         
         # Inner Frame
         self.inframe = ctk.CTkFrame(master=self.rframe, corner_radius=0)
-        self.inframe.grid(row=1, column=0, sticky="nsew")
+        self.inframe.grid(row=2, column=0, sticky="nsew")
 
         # Images Canvas
         self.imgCanvas = ctk.CTkCanvas(master=self.inframe)
-        self.imgCanvas.grid(row=1, column=0, sticky="nsew")
+        self.imgCanvas.grid(row=2, column=0, sticky="nsew")
 
         # Scroll Window
         self.vscroll = ctk.CTkScrollbar(master=self.inframe, command=self.imgCanvas.yview)
-        self.vscroll.grid(row=1, column=4, sticky="ns")
+        self.vscroll.grid(row=2, column=4, sticky="ns")
 
         # Configuration
         self.imgCanvas.configure(yscrollcommand=self.vscroll.set)
@@ -114,7 +114,7 @@ class App(ctk.CTk):
             # self.fileEntry.grid_forget()
             self.playButton.grid_forget()
             self.textLabel.configure(text="Click on the Mic Button and Speak")
-            self.inframe.grid(row=1, column=0, rowspan=3, columnspan=4, sticky="nsew")
+            self.inframe.grid(row=2, column=0, rowspan=3, columnspan=4, sticky="nsew")
             self.micButton.grid(row=0, column=0, padx=(20, 20), pady=(20, 20))
         else:
             self.micButton.grid_forget()
