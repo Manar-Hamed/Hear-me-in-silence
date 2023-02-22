@@ -253,7 +253,7 @@ class App(ctk.CTk):
         letter = ""
         self.string = ""
 
-        ArSL_model = load_model('models/best_model')
+        ArSL_model = load_model('models/ArSLText.h5')
 
         while(True):
             ret, img = source.read()
@@ -270,6 +270,7 @@ class App(ctk.CTk):
             resize = tf.image.resize(crop_img,(256,256))  # Resize to (256,256)
             np.expand_dims(resize, 0)
             normalized = resize/255  # Scale Image
+            # gray = tf.image.rgb_to_grayscale(resize)
  
             yhat = ArSL_model.predict(np.expand_dims(normalized, 0))
             result = np.where(yhat[0] == np.amax(yhat[0]))
