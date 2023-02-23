@@ -1,30 +1,18 @@
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
-
 from matplotlib.figure import Figure
-
 from keras.models import load_model
-
 from googletrans import Translator
-
 import speech_recognition as sr
-
 import customtkinter as ctk
-
 import tensorflow as tf
-
 from PIL import Image
-
 from gtts import gTTS
 import pandas as pd
-
 import numpy as np
 import random
-
 import pygame
-
 import cv2
 import os
-
 
 
 ctk.set_appearance_mode("System")
@@ -195,7 +183,7 @@ class App(ctk.CTk):
             self.textLabel.configure(text="")
             self.inframe.grid_forget()
             self.camButton.grid(row=0, column=0, padx=(20, 20), pady=(20, 20))
-            self.tranButton.configure(state='normal')
+            # self.tranButton.configure(state='normal')
         
         else:
             self.camButton.grid_forget()
@@ -319,7 +307,7 @@ class App(ctk.CTk):
             self.ArSL.append(image)
     # -------------------------------------------------
 
-    def translate(self): # Translate from arabic text to english text
+    def translate(self):
         txt = self.fileEntry.get()
         
         translator = Translator()
@@ -330,34 +318,21 @@ class App(ctk.CTk):
     # -------------------------------------------------
 
     def mic(self): # Microphone Input
-
         r = sr.Recognizer()
-
         mic = sr.Microphone()
 
-
         # Using Google Cloud API
-
         with mic as audio_file:
-
-
             r.adjust_for_ambient_noise(audio_file)
-
             audio = r.listen(audio_file)
-
 
             try:
                 # language ar-EG, en-US
                 text = r.recognize_google(audio, language='ar-EG')
-
-
                 self.label = self.label + "\n" + text + " :لقد قلت"
-
                 self.speect_text_image(text)
 
-
             except Exception as e:
-
                 self.label = self.label + "\n" + 'Error: ' + str(e)
 
 
