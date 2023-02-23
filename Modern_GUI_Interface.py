@@ -104,25 +104,25 @@ class App(ctk.CTk):
 
         # MIC Button
         self.micButton = ctk.CTkButton(self.rframe, text="", image=micPhoto, command=self.mic, fg_color="transparent")
-        self.micButton.grid(row=0, column=0, padx=(20, 20), pady=(20, 20))
+        self.micButton.grid(row=0, column=0)#, padx=(20, 20), pady=(20, 20))
 
         # CAM Button
         self.camButton = ctk.CTkButton(self.rframe, text="", image=camPhoto, command=self.cam, fg_color="transparent")
 
         # Browse Button
         self.browseButton = ctk.CTkButton(self.rframe, text="Browse", command=self.browse)
-        self.browseButton.grid(row=1, column=2, padx=(20, 20), pady=(20, 20))
+        self.browseButton.grid(row=1, column=1)#, padx=(20, 20), pady=(20, 20))
 
         # File Path Entry
         self.fileEntry = ctk.CTkEntry(self.rframe, placeholder_text="File Path")
-        self.fileEntry.grid(row=1, column=0, padx=(20, 20), pady=(20, 20), sticky="nsew")   
+        self.fileEntry.grid(row=1, column=0, pady=(20, 20), sticky="nsew") #padx=(20, 20)  
 
         # Covert Mode Button
         self.convButton = ctk.CTkButton(self.rframe, text="Convert", command=self.conv)     
 
         # Text Label
-        self.textLabel = ctk.CTkLabel(master=self.rframe, text="Click on the Mic Button and Speak", font=ctk.CTkFont(size=18, weight="bold"), anchor="e")
-        self.textLabel.grid(row=0, column=2, padx=(20, 0), pady=(20, 0), sticky="nsew")
+        self.textLabel = ctk.CTkLabel(master=self.rframe, text="Click on the Mic Button and Speak", font=ctk.CTkFont(size=16))#, weight="bold"), anchor="e")
+        self.textLabel.grid(row=0, column=1)#, padx=(20, 0), pady=(20, 0), sticky="nsew")
 
         # Translate Label
         self.tranLabel = ctk.CTkLabel(master=self.rframe, text="", font=ctk.CTkFont(size=18, weight="bold"))
@@ -171,20 +171,22 @@ class App(ctk.CTk):
             self.camButton.grid_forget()
             # self.browseButton.grid_forget()
             # self.fileEntry.grid_forget()
-            self.fileEntry.delete(0, ctk.END)
+            # self.fileEntry.delete(0, ctk.END)
+            self.fileEntry.configure(placeholder_text="File Path")
             self.playButton.grid_forget()
             self.textLabel.configure(text="Click on the Mic Button and Speak")
             self.inframe.grid(row=2, column=0, rowspan=3, columnspan=4, sticky="nsew")
             self.micButton.grid(row=0, column=0, padx=(20, 20), pady=(20, 20))
             self.tranButton.configure(state='disabled')
             self.tStatusLabel.configure(text="Translator: OFF", text_color='red')
+            self.imgCanvas.delete("all")
 
         elif input_mode == "Camera":
             self.micButton.grid_forget()
             self.textLabel.configure(text="")
             self.inframe.grid_forget()
             # self.inframe.destroy()
-            self.fileEntry.delete(0, ctk.END)
+            self.fileEntry.configure(placeholder_text="File Path")
             self.camButton.grid(row=0, column=0, padx=(20, 20), pady=(20, 20))
             # self.tranButton.configure(state='normal')
         
@@ -253,8 +255,10 @@ class App(ctk.CTk):
             title="Select Images",
             filetypes=(("All Files", "*.*"), ("Images", "*.png *.jpg *.jpeg *.PNG *.JPG *.JPEG", ))
             )
-
+        self.fileEntry.delete(0, ctk.END)
         self.fileEntry.insert(ctk.END, tf)
+        # self.imgCanvas.delete('all')
+        self.imgCanvas.grid(row=2, column=0, sticky="nsew")
 
         if self.inmode == "Microphone":
             self.mp3_text(tf)
@@ -360,7 +364,6 @@ class App(ctk.CTk):
 
 
     def speect_text_image(self, sentence):      
-
         # Special Characters Removal
         for sp in self.special_characters:
             sentence = sentence.replace(sp, '')
@@ -385,29 +388,19 @@ class App(ctk.CTk):
         
 
         # Displaying the Images
-
         for l1 in encoded:
-
             self.fig = Figure(figsize=(15,3), frameon=False)
-
             l1.reverse()
-
             self.ax = self.fig.subplots(1, len(l1))
 
             for i in range(len(l1)):
-
                 self.ax[i].imshow(self.ArSL[l1[i]], cmap='gray')
-
                 self.ax[i].set_title(self.guide[self.guide['Index'] == l1[i]]['Arabic_Letters'].iloc[0])
-
                 self.ax[i].tick_params(left = False, right = False , labelleft = False , labelbottom = False, bottom = False)
             
-
             self.canvas = FigureCanvasTkAgg(self.fig, master=self.imgCanvas)
-
             self.canvas.draw()
-
-            self.canvas.get_tk_widget().grid(sticky="nsew")
+            self.canvas.get_tk_widget().grid()#sticky="nsew")
 
     # -------------------------------------------------
 
