@@ -152,7 +152,7 @@ class App(ctk.CTk):
     imgdir = 'data\ArASL_Database_54K_Final\ArASL_Database_54K_Final'
     special_characters = ['@', '!', '؟', '$', '%', '^', '*', '-', '_']
     ArSL = []
-    inmode = ""
+    inmode = "Microphone"
     srclang = "ar"
     destlang = "en"
     imgs = []
@@ -171,6 +171,7 @@ class App(ctk.CTk):
             self.camButton.grid_forget()
             # self.browseButton.grid_forget()
             # self.fileEntry.grid_forget()
+            self.fileEntry.delete(0, ctk.END)
             self.playButton.grid_forget()
             self.textLabel.configure(text="Click on the Mic Button and Speak")
             self.inframe.grid(row=2, column=0, rowspan=3, columnspan=4, sticky="nsew")
@@ -182,6 +183,8 @@ class App(ctk.CTk):
             self.micButton.grid_forget()
             self.textLabel.configure(text="")
             self.inframe.grid_forget()
+            # self.inframe.destroy()
+            self.fileEntry.delete(0, ctk.END)
             self.camButton.grid(row=0, column=0, padx=(20, 20), pady=(20, 20))
             # self.tranButton.configure(state='normal')
         
@@ -208,7 +211,20 @@ class App(ctk.CTk):
             self.destlang = 'ar'
         elif language == "English":
             self.destlang = 'en'
-    
+    # -----------------------------------------------------
+
+    def mp3_text(self, file_audio):
+        file_audio = sr.AudioFile(file_audio[0])
+
+        # use the audio file as the audio source                                        
+        r = sr.Recognizer()
+        with file_audio as source:
+            audio_text = r.record(source)
+
+        # print(type(audio_text))
+        text = r.recognize_google(audio_text, language='ar-EG')
+        self.speect_text_image(text)
+    # ---------------------------------------------------------
     def tranMode(self):
         # self.tranLabel.grid(row=1, column=3, padx=(20, 0), pady=(20, 0), sticky="nsew")
         tran=True
@@ -241,22 +257,22 @@ class App(ctk.CTk):
         self.fileEntry.insert(ctk.END, tf)
 
         if self.inmode == "Microphone":
-            pass # Function name
+            self.mp3_text(tf)
         else:
             self.img_speech(list(tf))
     # -------------------------------------------------
 
-    def modelpath(self, src):
-        if src == "Arabic":
-            return 'models\ArSLText.h5'
-        elif src == "English":
-            return 'models\ASLText.h5'
+    # def modelpath(self, src):
+    #     if src == "Arabic":
+    #         return 'models\ArSLText.h5'
+    #     elif src == "English":
+    #         return 'models\ASLText.h5'
     # ------------------------------------------------
 
     def img_speech(self, fp): 
         #Loading the Model
-        modelPath = self.modelpath(self.srclang)
-        model = load_model(modelPath)
+        # modelPath = self.modelpath(self.srclang)
+        model = load_model('models\ArSLText.h5')
         
         for name in fp:
 
