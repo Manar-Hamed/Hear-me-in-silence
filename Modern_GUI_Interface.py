@@ -259,34 +259,22 @@ class App(ctk.CTk):
         model = load_model('models\ArSLText.h5')
         
         for name in fp:
-
             img = cv2.imread(name)
-
             # self.imgs.append(img)
-
             resize = tf.image.resize(img, (256, 256))
-
             np.expand_dims(resize, 0)
-
             yhat = model.predict(np.expand_dims(resize/255, 0))
-
             result = np.where(yhat[0] == np.amax(yhat[0]))
 
-
             letter = self.guide[self.guide["Index"] == result[0][0]]["Arabic_Letters"].iloc[0]
-
-
             self.string += letter
 
         # if self.tan:
         #     t = self.translate(self.string)
-
         #     self.tranLabel.configure(text=t)
         
         self.textLabel.configure(text=self.string)
-
         self.text_speech(self.string)  # Convert Text to Speech/Audio
-
         self.playButton.grid(row=4, column=0, padx=(20, 20), pady=(20, 20))
 
     # -------------------------------------------------
@@ -295,15 +283,10 @@ class App(ctk.CTk):
     def image_list(self):
 
         for cla in os.listdir(self.imgdir):
-
             p = self.imgdir + '\\' + cla
-
             imgName = random.choice(os.listdir(p))
-
             imPath = p + '\\' + imgName
-
             image = cv2.imread(imPath)
-
             self.ArSL.append(image)
     # -------------------------------------------------
 
@@ -340,9 +323,6 @@ class App(ctk.CTk):
 
     #--------------------------------------------------    
 
-    # def mp_to_text(slef, ##file path)
-
-
     def speect_text_image(self, sentence):      
         # Special Characters Removal
         for sp in self.special_characters:
@@ -352,13 +332,10 @@ class App(ctk.CTk):
         encoded = []
 
         for word in words:
-
             list_code = []
 
             for letter in word:
-
                 code = self.guide[self.guide['Arabic_Letters'] == letter]['Index'].iloc[0]
-
                 list_code.append(code)
 
             encoded.append(list_code)   
