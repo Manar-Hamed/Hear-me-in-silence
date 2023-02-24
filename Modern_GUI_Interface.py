@@ -28,8 +28,6 @@ class App(ctk.CTk):
         # Configure the Window
         self.title("Mutli SLs Translator")
 
-        self.configure(fg_color='#F1E7FE')
-
         #getting screen width and height of display
         width= self.winfo_screenwidth()
         height= self.winfo_screenheight()
@@ -41,21 +39,21 @@ class App(ctk.CTk):
         self.grid_rowconfigure((0, 1, 2), weight=1)
 
         # Title
-        self.label0 = ctk.CTkLabel(self, text="Multi Sign Languages Transaltor", text_color='black', font=ctk.CTkFont(size=18, weight="bold"), anchor=ctk.CENTER)
-        self.label0.grid(row=0, column=1, padx=(20, 0), pady=(20, 0), sticky="nsew")
+        self.label0 = ctk.CTkLabel(self, text="Multi Sign Languages Transaltor", font=ctk.CTkFont(size=18, weight="bold"), anchor=ctk.CENTER)
+        self.label0.grid(row=0, column=1, columnspan=4)#, padx=(20, 0), pady=(20, 0), sticky="nsew")
 
         # Left Side Frame
-        self.lframe = ctk.CTkFrame(self, corner_radius=0, fg_color='#D594FF')
-        self.lframe.grid(row=1, column=0, rowspan=4, sticky="nsew")
-        # self.lframe.grid_rowconfigure(4, weight=1)
+        self.lframe = ctk.CTkFrame(self, corner_radius=0, fg_color='#AAA6B0')
+        self.lframe.grid(row=0, column=0, rowspan=4, sticky="nsew")
+        self.lframe.grid_rowconfigure(4, weight=1)
 
         # Input Type Label
         self.InputLabel = ctk.CTkLabel(self.lframe, text="Input Type", font=ctk.CTkFont(size=14))#, weight="bold"))
-        self.InputLabel.grid(row=0, column=0)#, padx=(20, 0), pady=(20, 20), sticky="nsew")
+        self.InputLabel.grid(row=2, column=0)#, padx=(20, 0), pady=(20, 20), sticky="nsew")
 
         # Input Type Option Menu
         self.input_optionemenu = ctk.CTkOptionMenu(self.lframe, values=["Microphone", "Camera", "Text"], command=self.inputType)
-        self.input_optionemenu.grid(row=1, column=0, padx=20, pady=(10, 10))
+        self.input_optionemenu.grid(row=3, column=0, padx=20, pady=(10, 10))
         self.input_optionemenu.set("Microphone")  # Set Microphone as default
 
         # Source Language Label
@@ -285,9 +283,7 @@ class App(ctk.CTk):
         self.textLabel.configure(text=self.string)
         self.text_speech(self.string)  # Convert Text to Speech/Audio
         self.playButton.grid(row=4, column=0, padx=(20, 20), pady=(20, 20))
-
     # -------------------------------------------------
-
 
     def image_list(self):
 
