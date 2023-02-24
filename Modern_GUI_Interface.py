@@ -27,6 +27,7 @@ class App(ctk.CTk):
 
         # Configure the Window
         self.title("Mutli SLs Translator")
+
         #getting screen width and height of display
         width= self.winfo_screenwidth()
         height= self.winfo_screenheight()
@@ -36,6 +37,9 @@ class App(ctk.CTk):
         self.grid_columnconfigure(1, weight=1)
         self.grid_columnconfigure((2, 3), weight=0)
         self.grid_rowconfigure((0, 1, 2), weight=1)
+
+        # Background Image
+        micPhoto = ctk.CTkImage(dark_image= Image.open("gui_icons\microphone_icon.png"), size=(80,80))
 
         # Title
         self.label0 = ctk.CTkLabel(self, text="Multi Sign Languages Transaltor", font=ctk.CTkFont(size=20, weight="bold"))
