@@ -41,13 +41,13 @@ class App(ctk.CTk):
         self.grid_rowconfigure((0, 1, 2), weight=1)
 
         # Title
-        self.label0 = ctk.CTkLabel(self, text="Multi Sign Languages Transaltor", font=ctk.CTkFont(size=18, weight="bold"), anchor=ctk.CENTER)
-        self.label0.grid(row=0, column=0, padx=(20, 0), pady=(20, 0), sticky="nsew")
+        self.label0 = ctk.CTkLabel(self, text="Multi Sign Languages Transaltor", text_color='black', font=ctk.CTkFont(size=18, weight="bold"), anchor=ctk.CENTER)
+        self.label0.grid(row=0, column=1, padx=(20, 0), pady=(20, 0), sticky="nsew")
 
         # Left Side Frame
-        self.lframe = ctk.CTkFrame(self, corner_radius=0, fg_color='transparent')
+        self.lframe = ctk.CTkFrame(self, corner_radius=0, fg_color='#D594FF')
         self.lframe.grid(row=1, column=0, rowspan=4, sticky="nsew")
-        self.lframe.grid_rowconfigure(4, weight=1)
+        # self.lframe.grid_rowconfigure(4, weight=1)
 
         # Input Type Label
         self.InputLabel = ctk.CTkLabel(self.lframe, text="Input Type", font=ctk.CTkFont(size=14))#, weight="bold"))
