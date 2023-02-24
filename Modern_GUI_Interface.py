@@ -1,5 +1,7 @@
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from bidi.algorithm import get_display
 from matplotlib.figure import Figure
+from arabic_reshaper import reshape
 from keras.models import load_model
 from googletrans import Translator
 import speech_recognition as sr
@@ -204,8 +206,12 @@ class App(ctk.CTk):
 
         # print(type(audio_text))
         text = r.recognize_google(audio_text, language='ar-EG')
+        resh = reshape(text)
+        rev = get_display(resh)
+        self.textLabel.configure(text=rev, anchor='e')
         self.speect_text_image(text)
     # ---------------------------------------------------------
+    
     def tranMode(self):
         # self.tranLabel.grid(row=1, column=3, padx=(20, 0), pady=(20, 0), sticky="nsew")
         tran=True
