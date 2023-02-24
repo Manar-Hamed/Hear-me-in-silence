@@ -15,50 +15,34 @@ import cv2
 import os
 
 
-ctk.set_appearance_mode("System")
-
+ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("dark-blue")
 
 
-
 class App(ctk.CTk):
-
     def __init__(self):
-
         super().__init__()
 
-
         # Configure the Window
-
-        self.title("ArSL Translator")
-
-        self.geometry(f"{1100}x{580}")
-
+        self.title("Mutli SLs Translator")
+        #getting screen width and height of display
+        width= self.winfo_screenwidth()
+        height= self.winfo_screenheight()
+        self.geometry("%dx%d" % (width, height))
 
         # configure grid layout (4x4)
-
         self.grid_columnconfigure(1, weight=1)
-
         self.grid_columnconfigure((2, 3), weight=0)
-
         self.grid_rowconfigure((0, 1, 2), weight=1)
 
-
         # Title
-
-        self.label0 = ctk.CTkLabel(self, text="ArSL Transaltor", font=ctk.CTkFont(size=20, weight="bold"))
-
+        self.label0 = ctk.CTkLabel(self, text="Multi Sign Languages Transaltor", font=ctk.CTkFont(size=20, weight="bold"))
         self.label0.grid(row=0, column=1, padx=(20, 0), pady=(20, 0), sticky="nsew")
 
-
         # Left Side Frame
-
         self.lframe = ctk.CTkFrame(self, corner_radius=0)
-
         self.lframe.grid(row=1, column=0, rowspan=4, sticky="nsew")
-
         self.lframe.grid_rowconfigure(4, weight=1)
-
 
         # Input Type Label
         self.InputLabel = ctk.CTkLabel(self.lframe, text="Input Type", font=ctk.CTkFont(size=14))#, weight="bold"))
@@ -111,11 +95,11 @@ class App(ctk.CTk):
 
         # Browse Button
         self.browseButton = ctk.CTkButton(self.rframe, text="Browse", command=self.browse)
-        self.browseButton.grid(row=1, column=1)#, padx=(20, 20), pady=(20, 20))
+        self.browseButton.grid(row=1, column=4)#, pady=(20, 20))
 
         # File Path Entry
         self.fileEntry = ctk.CTkEntry(self.rframe, placeholder_text="File Path")
-        self.fileEntry.grid(row=1, column=0, pady=(20, 20), sticky="nsew") #padx=(20, 20)  
+        self.fileEntry.grid(row=1, column=0, columnspan=2, pady=(20, 20), sticky="nsew")
 
         # Covert Mode Button
         self.convButton = ctk.CTkButton(self.rframe, text="Convert", command=self.conv)     
@@ -128,19 +112,12 @@ class App(ctk.CTk):
         self.tranLabel = ctk.CTkLabel(master=self.rframe, text="", font=ctk.CTkFont(size=18, weight="bold"))
         
         # Inner Frame
-        self.inframe = ctk.CTkFrame(master=self.rframe, corner_radius=0)
-        self.inframe.grid(row=2, column=0, sticky="nsew")
+        self.inframe = ctk.CTkScrollableFrame(master=self)
+        self.inframe.grid(row=2, column=1, rowspan=4, columnspan=3, pady=(20,20), sticky="nsew")
 
         # Images Canvas
         self.imgCanvas = ctk.CTkCanvas(master=self.inframe)
-        self.imgCanvas.grid(row=2, column=0, sticky="nsew")
-
-        # Scroll Window
-        self.vscroll = ctk.CTkScrollbar(master=self.inframe, command=self.imgCanvas.yview)
-        self.vscroll.grid(row=2, column=4, sticky="ns")
-
-        # Configuration
-        self.imgCanvas.configure(yscrollcommand=self.vscroll.set)
+        self.imgCanvas.grid(row=0, column=0, columnspan=4, sticky="nsew")
 
         # Play Button
         self.playButton = ctk.CTkButton(self.rframe, text="", image=playPhoto, command=self.play_audio, fg_color="white")
@@ -179,11 +156,12 @@ class App(ctk.CTk):
             self.micButton.grid(row=0, column=0, padx=(20, 20), pady=(20, 20))
             self.tranButton.configure(state='disabled')
             self.tStatusLabel.configure(text="Translator: OFF", text_color='red')
-            self.imgCanvas.delete("all")
+            # self.imgCanvas.delete("all")
 
         elif input_mode == "Camera":
             self.micButton.grid_forget()
             self.textLabel.configure(text="")
+            self.imgCanvas.grid_forget()
             self.inframe.grid_forget()
             # self.inframe.destroy()
             self.fileEntry.configure(placeholder_text="File Path")
@@ -198,6 +176,7 @@ class App(ctk.CTk):
             self.textLabel.configure(text="")
             self.fileEntry.configure(placeholder_text="Enter Text")
             self.tranButton.configure(state='normal')
+            self.imgCanvas.grid_forget()
             self.inframe.grid_forget()
             self.convButton.grid(row=1, column=1, padx=(20, 20), pady=(20, 20))
     # -------------------------------------------------
@@ -248,17 +227,18 @@ class App(ctk.CTk):
         self.playButton.grid(row=2, column=0, padx=(20, 20), pady=(20, 20))
         self.inframe.grid(row=3, column=0, sticky="nsew")
         self.speect_text_image(txt) # Arabic Text to Images Conversion
+    # ----------------------------------------------------------------------------
 
     def browse(self):  # Open Image Files
         tf = ctk.filedialog.askopenfilenames(
             initialdir=r".\data\\Test",
-            title="Select Images",
-            filetypes=(("All Files", "*.*"), ("Images", "*.png *.jpg *.jpeg *.PNG *.JPG *.JPEG", ))
+            title="Select",
+            filetypes=(("All Files", "*.*"), ("Images", "*.png *.jpg *.jpeg *.PNG *.JPG *.JPEG", ), ("Audios", "*.wav *.WAV"))
             )
         self.fileEntry.delete(0, ctk.END)
         self.fileEntry.insert(ctk.END, tf)
-        # self.imgCanvas.delete('all')
-        self.imgCanvas.grid(row=2, column=0, sticky="nsew")
+        # self.imgCanvas.grid_forget()
+        
 
         if self.inmode == "Microphone":
             self.mp3_text(tf)
@@ -381,15 +361,13 @@ class App(ctk.CTk):
 
                 list_code.append(code)
 
-            encoded.append(list_code)
-            
+            encoded.append(list_code)   
 
         self.image_list()  # Fetch an image for each letter    
-        
-
+    
         # Displaying the Images
         for l1 in encoded:
-            self.fig = Figure(figsize=(15,3), frameon=False)
+            self.fig = Figure(figsize=(15,3))#, frameon=False)
             l1.reverse()
             self.ax = self.fig.subplots(1, len(l1))
 
@@ -401,17 +379,13 @@ class App(ctk.CTk):
             self.canvas = FigureCanvasTkAgg(self.fig, master=self.imgCanvas)
             self.canvas.draw()
             self.canvas.get_tk_widget().grid()#sticky="nsew")
-
     # -------------------------------------------------
 
 
     def cam(self):  # Camera Input
 
         # self.imageLabel.grid_forget()
-        
-
         source = cv2.VideoCapture(0)
-
         color_dict = (0,255,0)
         count = 0
 
@@ -422,33 +396,21 @@ class App(ctk.CTk):
         modelPath = self.modelpath(self.srclang)
         model = load_model(modelPath)
 
-
         while(True):
             ret, img = source.read()
-
             cv2.rectangle(img, (24,24), (350 , 350), color_dict, 2)
-
             bgr = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
-
-            crop_img = bgr[24:350,24:350]
-            
+            crop_img = bgr[24:350,24:350]          
 
             count += 1
-
             if (count % 100 == 0):
-
-                prev_val = count
-            
+                prev_val = count          
 
             cv2.putText(img, str(prev_val//100), (400, 150),cv2.FONT_HERSHEY_SIMPLEX,1.5,(255,255,255),2)
 
-
             resize = tf.image.resize(crop_img,(256,256))  # Resize to (256,256)
-
             np.expand_dims(resize, 0)
-
             normalized = resize/255  # Scale Image
-
             # gray = tf.image.rgb_to_grayscale(resize)
  
             yhat = model.predict(np.expand_dims(normalized, 0))
@@ -476,7 +438,6 @@ class App(ctk.CTk):
         self.textLabel.configure(text=self.string)
         self.text_speech(self.string)  # Convert Text to Speech/Audio
         self.playButton.grid(row=4, column=0, padx=(20, 20), pady=(20, 20))
-
     # -------------------------------------------------
     
     def text_speech(self, Text):
