@@ -28,6 +28,8 @@ class App(ctk.CTk):
         # Configure the Window
         self.title("Mutli SLs Translator")
 
+        self.configure(fg_color='#F1E7FE')
+
         #getting screen width and height of display
         width= self.winfo_screenwidth()
         height= self.winfo_screenheight()
@@ -38,15 +40,12 @@ class App(ctk.CTk):
         self.grid_columnconfigure((2, 3), weight=0)
         self.grid_rowconfigure((0, 1, 2), weight=1)
 
-        # Background Image
-        micPhoto = ctk.CTkImage(dark_image= Image.open("gui_icons\microphone_icon.png"), size=(80,80))
-
         # Title
-        self.label0 = ctk.CTkLabel(self, text="Multi Sign Languages Transaltor", font=ctk.CTkFont(size=20, weight="bold"))
-        self.label0.grid(row=0, column=1, padx=(20, 0), pady=(20, 0), sticky="nsew")
+        self.label0 = ctk.CTkLabel(self, text="Multi Sign Languages Transaltor", font=ctk.CTkFont(size=18, weight="bold"), anchor=ctk.CENTER)
+        self.label0.grid(row=0, column=0, padx=(20, 0), pady=(20, 0), sticky="nsew")
 
         # Left Side Frame
-        self.lframe = ctk.CTkFrame(self, corner_radius=0)
+        self.lframe = ctk.CTkFrame(self, corner_radius=0, fg_color='transparent')
         self.lframe.grid(row=1, column=0, rowspan=4, sticky="nsew")
         self.lframe.grid_rowconfigure(4, weight=1)
 
@@ -84,7 +83,7 @@ class App(ctk.CTk):
         self.tranButton.configure(state='disabled')
 
         # Right Side Frame
-        self.rframe = ctk.CTkFrame(self, corner_radius=0)
+        self.rframe = ctk.CTkFrame(self, corner_radius=0, fg_color='transparent')
         self.rframe.grid(row=1, column=1, rowspan=4, columnspan=3, sticky="nsew")
 
         # Image Objects
@@ -118,7 +117,7 @@ class App(ctk.CTk):
         self.tranLabel = ctk.CTkLabel(master=self.rframe, text="", font=ctk.CTkFont(size=18, weight="bold"))
         
         # Inner Frame
-        self.inframe = ctk.CTkScrollableFrame(master=self)
+        self.inframe = ctk.CTkScrollableFrame(master=self, fg_color='transparent')
         self.inframe.grid(row=2, column=1, rowspan=4, columnspan=3, pady=(20,20), sticky="nsew")
 
         # Images Canvas
