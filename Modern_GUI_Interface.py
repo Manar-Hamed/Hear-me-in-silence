@@ -142,8 +142,8 @@ class App(ctk.CTk):
     codes = {'gtrans': ['ar', 'en', 'hi'],
     'gcloud': ['ar-EG', 'en-US', 'hi-IN']}
 
-    guide = pd.read_csv('data\Arabic_Letters_Guide.csv') # Loading the Arabic Letters Guide
-    imgdir = 'data\ArASL_Database_54K_Final\ArASL_Database_54K_Final'
+    guide = pd.read_csv('data\Arabic\Arabic_Letters_Guide.csv') # Loading the Arabic Letters Guide
+    imgdir = 'data\Arabic\ArASL_Database_54K_Final\ArASL_Database_54K_Final'
     special_characters = ['@', '!', '؟', '$', '%', '^', '*', '-', '_']
     ArSL = []
     inmode = "Microphone"
@@ -223,7 +223,7 @@ class App(ctk.CTk):
         resh = reshape(text)
         rev = get_display(resh)
         self.textLabel.configure(text=rev, anchor='e')
-        self.speect_text_image(text)
+        self.speech_text_image(text)
     # ---------------------------------------------------------
     
     def tranMode(self):
@@ -239,7 +239,7 @@ class App(ctk.CTk):
             self.destLang_optionemenu.grid(row=6, column=0)#, padx=10, pady=(10, 0))
             self.destLang_optionemenu.set("English")  # Set Arabic as default
 
-            self.inframe.grid_forget()
+            # self.inframe.grid_forget()
             self.playButton.grid_forget()
             self.textLabel.configure(text="")
 
@@ -271,7 +271,7 @@ class App(ctk.CTk):
         self.playButton.grid(row=1, column=5, padx=(10, 0), pady=(10, 0))
         self.imgCanvas.destroy()
         self.inframe.grid(row=2, column=1, rowspan=4, columnspan=3, sticky="nsew")#, padx=(10,10), pady=(10,0), sticky="nsew")
-        self.speect_text_image(txt) # Arabic Text to Images Conversion
+        self.speech_text_image(txt) # Arabic Text to Images Conversion
     # ----------------------------------------------------------------------------
 
     def browse(self):  # Open Image Files
@@ -301,8 +301,8 @@ class App(ctk.CTk):
 
     def img_speech(self, fp): 
         #Loading the Model
-        # modelPath = self.modelpath(self.srclang)
-        model = load_model('models\ArSLText.h5')
+        modelPath = self.modelpath(self.srclang)
+        model = load_model(modelPath)
         
         for name in fp:
             img = cv2.imread(name)
@@ -323,7 +323,7 @@ class App(ctk.CTk):
         
         self.textLabel.configure(text=rev)
         self.text_speech(self.string)  # Convert Text to Speech/Audio
-        self.playButton.grid(row=3, column=0, padx=(20, 20), pady=(20,20))
+        # self.playButton.grid(row=3, column=0, padx=(20, 20), pady=(20,20))
     # -------------------------------------------------
 
     def image_list(self):
@@ -349,6 +349,9 @@ class App(ctk.CTk):
 
         self.textLabel.configure(text="{} -> {}".format(translated.origin, translated.text))
 
+        if self.inmode == "Text":
+            self.text_speech(Text=translated.text, dest=self.codes['gtrans'][des_idx]) # Text to Speech Conversion
+
         if self.inmode == "Microphone":
             return translated.text
     # -------------------------------------------------
@@ -373,21 +376,27 @@ class App(ctk.CTk):
                 
                 if self.tran==True:
                     t = self.translate(txt=text)
-                    
-                self.speech_text_image(t)
+                    self.speech_text_image(t)
+                    # break
+                else:
+                    self.speech_text_image(text)
 
             except Exception as e:
                 self.label = self.label + "\n" + 'Error: ' + str(e)
             
-            resh = reshape(text)
-            rev = get_display(resh)
-            self.textLabel.configure(text=rev, anchor='e')
+            # resh = reshape(text)
+            # rev = get_display(resh)
+            # self.textLabel.configure(text=rev, anchor='e')
 
             # self.textLabel.configure(text=self.label)
     #--------------------------------------------------    
 
     def speech_text_image(self, sentence):      
         # Special Characters Removal
+
+        if self.destlang != "Arabic":
+            return
+
         for sp in self.special_characters:
             sentence = sentence.replace(sp, '')
 
@@ -485,15 +494,16 @@ class App(ctk.CTk):
 
         # self.textLabel.configure(text=self.string)
         self.text_speech(self.string)  # Convert Text to Speech/Audio
-        self.playButton.grid(row=3, column=0, padx=(20, 20), pady=(20, 20))
+        # self.playButton.grid(row=3, column=0, padx=(20, 20), pady=(20, 20))
     # -------------------------------------------------
     
-    def text_speech(self, Text):
+    def text_speech(self, Text, dest='ar'):
         # lang - ar, en
 
-        txt_sound = gTTS(text=Text, lang='ar', slow=False)
+        txt_sound = gTTS(text=Text, lang=dest, slow=False)
         self.audioPath = 'audio/Audio_' + Text + '.mp3'
         txt_sound.save(self.audioPath)
+        self.playButton.grid(row=3, column=0, padx=(20, 20), pady=(20, 20))
 
     # -------------------------------------------------
 
