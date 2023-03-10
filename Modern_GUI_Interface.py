@@ -268,7 +268,7 @@ class App(ctk.CTk):
         rev = get_display(resh)
         self.textLabel.configure(text=rev, anchor='e')
         self.text_speech(txt) # Arabic Text to Speech Conversion
-        self.playButton.grid(row=1, column=5, padx=(10, 0), pady=(10, 0))
+        # self.playButton.grid(row=1, column=5, padx=(10, 0), pady=(10, 0))
         self.imgCanvas.destroy()
         self.inframe.grid(row=2, column=1, rowspan=4, columnspan=3, sticky="nsew")#, padx=(10,10), pady=(10,0), sticky="nsew")
         self.speech_text_image(txt) # Arabic Text to Images Conversion
@@ -351,6 +351,9 @@ class App(ctk.CTk):
 
         if self.inmode == "Text":
             self.text_speech(Text=translated.text, dest=self.codes['gtrans'][des_idx]) # Text to Speech Conversion
+            self.imgCanvas.destroy()
+            self.inframe.grid(row=2, column=1, rowspan=4, columnspan=3, sticky="nsew")#, padx=(10,10), pady=(10,0), sticky="nsew")
+            self.speech_text_image(txt) # Arabic Text to Images Conversion
 
         if self.inmode == "Microphone":
             return translated.text
