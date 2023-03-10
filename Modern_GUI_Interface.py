@@ -153,7 +153,7 @@ class App(ctk.CTk):
     label = ""
     string = ""
     pygame.mixer.init()  # initialise the pygame
-    # tran = False
+    tran = False
 
     # Commands\Functions Section
 
@@ -229,7 +229,7 @@ class App(ctk.CTk):
     def tranMode(self):
         if self.switch_var.get() == 'ON':
             # self.tranLabel.grid(row=1, column=3, padx=(20, 0), pady=(20, 0), sticky="nsew")
-            # tran=True
+            self.tran=True
             self.tStatusLabel.configure(text="Translator: ON", text_color='green')
             self.srcLangLabel.grid(row=3, column=0, padx=(10, 0), pady=(10, 0), sticky="nsew")
             # row=2, column=0, padx=10, pady=(10, 0)
@@ -336,22 +336,21 @@ class App(ctk.CTk):
             self.ArSL.append(image)
     # -------------------------------------------------
 
-    def translate(self):
+    def translate(self, txt=None):
 
         if self.inmode == "Text":
             txt = self.fileEntry.get()
-
+        
         src_idx = self.languages.index(self.srclang)
         des_idx = self.languages.index(self.destlang)
         
         translator = Translator()
         translated = translator.translate(txt, src=self.codes['gtrans'][src_idx], dest=self.codes['gtrans'][des_idx])
 
-        # resh = reshape(txt)
-        # rev = get_display(resh)
-
         self.textLabel.configure(text="{} -> {}".format(translated.origin, translated.text))
-        # return translated.text
+
+        if self.inmode == "Microphone":
+            return translated.text
     # -------------------------------------------------
 
     def mic(self): # Microphone Input
@@ -371,9 +370,11 @@ class App(ctk.CTk):
                 # language ar-EG, en-US
                 text = r.recognize_google(audio, language=self.codes['gcloud'][src_idx])
                 self.label = self.label + "\n" + text + " :لقد قلت"
-                if tran==True:
-                    self.translate(text)
-                self.speect_text_image(text)
+                
+                if self.tran==True:
+                    t = self.translate(txt=text)
+                    
+                self.speech_text_image(t)
 
             except Exception as e:
                 self.label = self.label + "\n" + 'Error: ' + str(e)
@@ -385,7 +386,7 @@ class App(ctk.CTk):
             # self.textLabel.configure(text=self.label)
     #--------------------------------------------------    
 
-    def speect_text_image(self, sentence):      
+    def speech_text_image(self, sentence):      
         # Special Characters Removal
         for sp in self.special_characters:
             sentence = sentence.replace(sp, '')
