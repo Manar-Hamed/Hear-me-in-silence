@@ -173,6 +173,7 @@ class App(ctk.CTk):
             self.micButton.grid(row=0, column=0, padx=(20, 20), pady=(20, 20))
             # self.tranButton.configure(state='disabled')
             self.tStatusLabel.configure(text="Translator: OFF", text_color='red')
+            self.convButton.grid_forget()
             # self.imgCanvas.delete("all")
 
         elif input_mode == "Camera":
@@ -185,6 +186,7 @@ class App(ctk.CTk):
             self.fileEntry.delete(0, ctk.END)
             # self.fileEntry.configure(placeholder_text="File Path")
             self.camButton.grid(row=0, column=0, padx=(20, 20), pady=(20, 20))
+            self.convButton.grid_forget()
             # self.tranButton.configure(state='normal')
         
         else:
@@ -351,8 +353,8 @@ class App(ctk.CTk):
 
         if self.inmode == "Text":
             self.text_speech(Text=translated.text, dest=self.codes['gtrans'][des_idx]) # Text to Speech Conversion
-            self.imgCanvas.destroy()
-            self.inframe.grid(row=2, column=1, rowspan=4, columnspan=3, sticky="nsew")#, padx=(10,10), pady=(10,0), sticky="nsew")
+            # self.imgCanvas.destroy()
+            # self.inframe.grid(row=2, column=1, rowspan=4, columnspan=3, sticky="nsew")#, padx=(10,10), pady=(10,0), sticky="nsew")
             self.speech_text_image(txt) # Arabic Text to Images Conversion
 
         if self.inmode == "Microphone":
@@ -383,6 +385,11 @@ class App(ctk.CTk):
                     # break
                 else:
                     self.speech_text_image(text)
+                    resh = reshape(text)
+                    rev = get_display(resh)
+                    self.textLabel.configure(text=rev, anchor='e')
+
+                    self.textLabel.configure(text=self.label)
 
             except Exception as e:
                 self.label = self.label + "\n" + 'Error: ' + str(e)
