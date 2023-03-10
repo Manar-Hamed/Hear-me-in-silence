@@ -57,27 +57,27 @@ class App(ctk.CTk):
         self.input_optionemenu.set("Microphone")  # Set Microphone as default
 
         # Source Language Label
-        # self.srcLangLabel = ctk.CTkLabel(self.lframe, text="From", font=ctk.CTkFont(size=14))#, weight="bold"))
+        self.srcLangLabel = ctk.CTkLabel(self.lframe, text="From", font=ctk.CTkFont(size=14))#, weight="bold"))
         # self.InputLabel.grid(row=2, column=0, padx=(20, 0), pady=(20, 20), sticky="nsew")
 
         # Source Language Option Menu
-        # self.srcLang_optionemenu = ctk.CTkOptionMenu(self.lframe, values=["Arabic", "English"], command=self.fromlang)
+        self.srcLang_optionemenu = ctk.CTkOptionMenu(self.lframe, values=self.languages, command=self.fromlang)
         # self.input_optionemenu.grid(row=3, column=0, padx=20, pady=(10, 10))
         # self.input_optionemenu.set("Arabic")  # Set Arabic as default
 
         # Destination Language Label
-        # self.destLangLabel = ctk.CTkLabel(self.lframe, text="To", font=ctk.CTkFont(size=14))#, weight="bold"))
+        self.destLangLabel = ctk.CTkLabel(self.lframe, text="To", font=ctk.CTkFont(size=14))#, weight="bold"))
 
         # Destination Language Option Menu
-        # self.destLang_optionemenu = ctk.CTkOptionMenu(self.lframe, values=["Arabic", "English"], command=self.tolang)
+        self.destLang_optionemenu = ctk.CTkOptionMenu(self.lframe, values=self.languages, command=self.tolang)
 
         # Translator Status Label
         self.tStatusLabel = ctk.CTkLabel(self.lframe, text="Translator: OFF", text_color='red', font=ctk.CTkFont(size=12))
-        self.tStatusLabel.grid(row=6, column=0)#, padx=(20, 0), pady=(20, 20), sticky="nsew")
+        self.tStatusLabel.grid(row=7, column=0)#, padx=(20, 0), pady=(20, 20), sticky="nsew")
 
         # Translator Mode Button
-        self.tranButton = ctk.CTkButton(self.lframe, text="Translator")#, command=self.tranMode)
-        self.tranButton.grid(row=7, column=0, padx=(20, 20), pady=(20, 20))
+        self.tranButton = ctk.CTkButton(self.lframe, text="Translator", command=self.tranMode)
+        self.tranButton.grid(row=8, column=0, padx=(20, 20), pady=(20, 20))
         self.tranButton.configure(state='disabled')
 
         # Right Side Frame
@@ -132,13 +132,19 @@ class App(ctk.CTk):
 
     # Defaults/Globals
 
+    languages = ['Arabic', 'English', 'Hindi']
+    
+    # hi: Hindi
+    codes = {'gtrans': ['ar', 'en', 'hi'],
+    'gcloud': ['ar-EG', 'en-US', 'hi-IN']}
+
     guide = pd.read_csv('data\Arabic_Letters_Guide.csv') # Loading the Arabic Letters Guide
     imgdir = 'data\ArASL_Database_54K_Final\ArASL_Database_54K_Final'
     special_characters = ['@', '!', '؟', '$', '%', '^', '*', '-', '_']
     ArSL = []
     inmode = "Microphone"
-    srclang = "ar"
-    destlang = "en"
+    srclang = "Arabic"
+    destlang = "English"
     imgs = []
     label = ""
     string = ""
@@ -184,26 +190,20 @@ class App(ctk.CTk):
             self.micButton.grid_forget()
             self.textLabel.configure(text="")
             self.fileEntry.delete(0, ctk.END)
-            # self.fileEntry.configure(placeholder_text="Enter Text")
-            # self.tranButton.configure(state='normal')
+            self.fileEntry.configure(placeholder_text="Enter Text")
+            self.tranButton.configure(state='normal')
             # self.imgCanvas.grid_forget()
             self.inframe.grid_forget()
             # self.inframe.grid(row=4, column=1, rowspan=4, columnspan=3, padx=(20,20), pady=(20,20), sticky="nsew")
             self.convButton.grid(row=1, column=4, padx=(10, 10), pady=(20, 0))
     # -------------------------------------------------
     
-    # def fromlang(self, language: str):
-    #     if language == "Arabic":
-    #         self.srclang = 'ar'
-    #     elif language == "English":
-    #         self.srclang = 'en'
-    # # ------------------------------------------------------
+    def fromlang(self, language: str):
+        self.srclang = language
+    # ------------------------------------------------------
     
-    # def tolang(self, language: str):
-    #     if language == "Arabic":
-    #         self.destlang = 'ar'
-    #     elif language == "English":
-    #         self.destlang = 'en'
+    def tolang(self, language: str):
+        self.destlang = language
     # -----------------------------------------------------
 
     def mp3_text(self, file_audio):
@@ -222,18 +222,26 @@ class App(ctk.CTk):
         self.speect_text_image(text)
     # ---------------------------------------------------------
     
-    # def tranMode(self):
-    #     # self.tranLabel.grid(row=1, column=3, padx=(20, 0), pady=(20, 0), sticky="nsew")
-    #     tran=True
-    #     self.tStatusLabel.configure(text="Translator: ON", text_color='green')
-    #     self.srcLangLabel.grid(row=2, column=0)#, padx=(20, 0), pady=(20, 20), sticky="nsew")
-    #     self.srcLang_optionemenu.grid(row=3, column=0)#, padx=20, pady=(10, 10))
-    #     self.srcLang_optionemenu.set("Arabic")  # Set Arabic as default
-    #     self.destLangLabel.grid(row=4, column=0)#, padx=(20, 0), pady=(20, 20), sticky="nsew")
-    #     self.destLang_optionemenu.grid(row=5, column=0)#, padx=20, pady=(10, 10))
-    #     self.destLang_optionemenu.set("English")  # Set Arabic as default
+    def tranMode(self):
+        # self.tranLabel.grid(row=1, column=3, padx=(20, 0), pady=(20, 0), sticky="nsew")
+        tran=True
+        self.tStatusLabel.configure(text="Translator: ON", text_color='green')
+        self.srcLangLabel.grid(row=3, column=0, padx=(10, 0), pady=(10, 0), sticky="nsew")
+        # row=2, column=0, padx=10, pady=(10, 0)
+        self.srcLang_optionemenu.grid(row=4, column=0, padx=10, pady=(10, 0))
+        self.srcLang_optionemenu.set("Arabic")  # Set Arabic as default
+        self.destLangLabel.grid(row=5, column=0, padx=(10, 0), pady=(10, 0), sticky="nsew")
+        self.destLang_optionemenu.grid(row=6, column=0, padx=10, pady=(10, 0))
+        self.destLang_optionemenu.set("English")  # Set Arabic as default
 
-    #     self.convButton.configure(text='Translate', command=self.translate)
+        self.inframe.grid_forget()
+        self.playButton.grid_forget()
+        self.textLabel.configure(text="")
+
+        self.fileEntry.delete(0, ctk.END)
+        self.fileEntry.configure(placeholder_text="Enter Text")
+
+        self.convButton.configure(text='Translate', command=self.translate)
     #-------------------------------------------------
 
     def conv(self):
@@ -310,14 +318,17 @@ class App(ctk.CTk):
             self.ArSL.append(image)
     # -------------------------------------------------
 
-    # def translate(self):
-    #     txt = self.fileEntry.get()
-        
-    #     translator = Translator()
-    #     translated = translator.translate(txt, src='ar', dest='en')
+    def translate(self):
+        txt = self.fileEntry.get()
 
-    #     self.textLabel.configure(text=txt)
-    #     # return translated.text
+        src_idx = self.languages.index(self.srclang)
+        des_idx = self.languages.index(self.destlang)
+        
+        translator = Translator()
+        translated = translator.translate(txt, src=self.codes['gtrans'][src_idx], dest=self.codes['gtrans'][des_idx])
+
+        self.textLabel.configure(text="{} -> {}".format(translated.origin, translated.text))
+        # return translated.text
     # -------------------------------------------------
 
     def mic(self): # Microphone Input
@@ -463,7 +474,6 @@ class App(ctk.CTk):
         pygame.mixer.music.play(loops=0)
 
     # ----------------------------------------------------------------------
-
 
 
 if __name__ == "__main__":
