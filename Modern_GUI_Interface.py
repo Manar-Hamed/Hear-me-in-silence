@@ -1,31 +1,19 @@
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-
 from bidi.algorithm import get_display
-
 from matplotlib.figure import Figure
-
 from arabic_reshaper import reshape
-
 from keras.models import load_model
-
 from googletrans import Translator
-
 import speech_recognition as sr
-
+import pyarabic.araby as araby
 import customtkinter as ctk
-
 import tensorflow as tf
-
 from PIL import Image
-
 from gtts import gTTS
 import pandas as pd
-
 import numpy as np
 import random
-
 import pygame
-
 import cv2
 import os
 
@@ -250,7 +238,7 @@ class App(ctk.CTk):
 
     imgdir = 'data\Arabic\ArASL_Database_54K_Final\ArASL_Database_54K_Final'
 
-    special_characters = ['@', '!', '?', '؟', '$', '%', '^', '*', '-', '_', ' ّ', ' ً', ' َ', ' ُ', ' ٌ', ' ِ', ' ٍ']
+    special_characters = ['@', '!', '?', '؟', '$', '%', '^', '*', '-', '_']
 
     ArSL = []
 
@@ -318,7 +306,7 @@ class App(ctk.CTk):
             self.fileEntry.delete(0, ctk.END)
             self.fileEntry.configure(placeholder_text="Enter Text")
             # self.tranButton.configure(state='normal')
-            self.imgCanvas.grid_forget()
+            # self.imgCanvas.grid_forget()
             self.inframe.grid_forget()
             self.inframe.grid(row=4, column=1, rowspan=4, columnspan=3, padx=(20,20), pady=(20,20), sticky="nsew")
 
@@ -366,12 +354,12 @@ class App(ctk.CTk):
             self.destLang_optionemenu.grid(row=6, column=0)#, padx=10, pady=(10, 0))
             self.destLang_optionemenu.set("English")  # Set Arabic as default
 
-            # self.inframe.grid_forget()
-            self.playButton.grid_forget()
-            self.imgCanvas.destroy()
-            self.textLabel.configure(text="")
-            self.fileEntry.delete(0, ctk.END)
-            self.fileEntry.configure(placeholder_text="Enter Text")
+            # # self.inframe.grid_forget()
+            # self.playButton.grid_forget()
+            # self.imgCanvas.destroy()
+            # self.textLabel.configure(text="")
+            # self.fileEntry.delete(0, ctk.END)
+            # self.fileEntry.configure(placeholder_text="Enter Text")
 
             # t = self.fileEntry.get()
             self.convButton.configure(text='Translate', command=self.translate)
@@ -388,9 +376,7 @@ class App(ctk.CTk):
             self.fileEntry.delete(0, ctk.END)
             self.fileEntry.configure(placeholder_text="Enter Text")
             self.convButton.configure(text='Convert', command=self.conv)
-
     #-------------------------------------------------
-
 
     def conv(self):
 
@@ -510,10 +496,11 @@ class App(ctk.CTk):
 
         if self.inmode == "Text":
             self.text_speech(Text=translated.text, dest=self.codes['gtrans'][des_idx]) # Text to Speech Conversion
-            self.playButton.grid(row=3, column=0, padx=(20, 20), pady=(20, 20))
+            # self.playButton.grid(row=3, column=0, padx=(20, 20), pady=(20, 20))
+            self.playButton.grid(row=1, column=5, padx=(10, 0), pady=(10, 0))
             # self.imgCanvas.grid_forget()
-            self.inframe.grid_forget()
-            self.inframe.grid(row=4, column=1, rowspan=4, columnspan=3, padx=(20,20), pady=(20,20), sticky="nsew")
+            self.imgCanvas.destroy()
+            self.inframe.grid(row=2, column=1, rowspan=4, columnspan=3, sticky="nsew")
             self.text_image(translated.text) # Arabic Text to Images Conversion
 
         if self.inmode == "Microphone":
@@ -570,6 +557,8 @@ class App(ctk.CTk):
         for sp in self.special_characters:
             sentence = sentence.replace(sp, '')
 
+        sentence = araby.strip_diacritics(sentence)
+
         words = sentence.split(' ')
         encoded = []
 
@@ -578,12 +567,11 @@ class App(ctk.CTk):
 
             for letter in word:
                 print(letter)
-                # return
-                # code = self.guide[self.guide['Arabic_Letters'] == letter]['Index'].values[0]#.iloc[0]
-                # list_code.append(code)
+                code = self.guide[self.guide['Arabic_Letters'] == letter]['Index'].values[0]#.iloc[0]
+                list_code.append(code)
 
-            # encoded.append(list_code)   
-        return
+            encoded.append(list_code)   
+        # return
         self.image_list()  # Fetch an image for each letter 
 
         self.imgCanvas = ctk.CTkCanvas(master=self.inframe)
