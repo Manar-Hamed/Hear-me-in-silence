@@ -2,9 +2,10 @@
 
 This is a project that aims to develop a system capable of translating sign language into multiple spoken languages and vice versa, using computer vision and artificial intelligence techniques. This project seeks to bridge communication gaps between deaf and hearing communities by providing an accessible, efficient, and accurate translation tool that can understand and produce sign language in real-time.
 
-This project can take input in 3 different form. 
+This project can take input in 3 different form. <br>
 ![Alt text](Readme_Images/Channels.drawio.png)
 
+<h5>Images Input</h5>
 <ul>
 <li> The system captures a series of images using a camera. These images are of individuals performing sign language gestures.
 <li> The images are pre-processed to improve the quality for better recognition. This step may include resizing, normalization, and potentially augmenting the data to improve the robustness of the model against variations in background, lighting, and the signer's position.
