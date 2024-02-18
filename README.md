@@ -15,5 +15,24 @@ This project can take input in 3 different form. <br>
 </ul>
 <img src="Readme_Images/Image_Speech.drawio.png">
 
+<h5>Audio Input</h5>
+<ul>
+<li> The system starts by capturing audio input, which could be spoken words or sentences from a user. This input is then processed to remove noise and enhance clarity for more accurate recognition.
+<li> The cleaned audio data is fed into a speech recognition engine, which converts the spoken language into text. This step involves using advanced algorithms and models trained on diverse datasets to accurately transcribe spoken words across different languages and accents.
+<li> The text obtained from the speech recognition is then translated into sign language tokens.
+<li>  Once the sign language tokens are determined, the system generates a visual representation of the sign language.
+<li> The generated sign language images are presented to the user through a display. This visual output allows deaf or hard-of-hearing individuals to understand the spoken language content through sign language.
+</ul>
+<img src="Readme_Images\Speech_Image.png">
+
+<h5>Text Input</h5>
+<ul>
+<li> The process begins with the user inputting text, which could be in the form of sentences, phrases, or words. This text represents the message that needs to be translated into sign language.
+<li> The entered text is analyzed and translated into sign language tokens.
+<li> Once the sign language equivalent of the text is determined, the system generates a visual representation of the sign language.
+<li>  The visual representation of the sign language is displayed to the user. This enables individuals who understand sign language to receive the message conveyed by the text input.
+</ul>
+<img src="Readme_Images\DualPath.drawio.png">
+
 
 The successful implementation of this project could significantly enhance communication access for the deaf and hard-of-hearing communities, fostering more inclusive societies. Achieving this goal requires interdisciplinary collaboration among computer scientists, linguists, sign language experts, and community stakeholders.
